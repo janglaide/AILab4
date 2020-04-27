@@ -4,7 +4,7 @@ main(D):-
     writeln(D).
 
 start_state([0,0,[10,10]]).
-finish([_,_,_]):-
+finish([_, _, _):-
     end_state([3,_,_]);
     end_state([_,3,_]).
 
