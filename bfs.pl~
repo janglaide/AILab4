@@ -13,7 +13,7 @@ bfs(State-[],History,[]):-
     bfs(NextState-[P],NewHistory,T).
 bfs(State-Path,_,[_]):-
     final_state(State),
-    append(Path,State,FinalPath),
+    append_cor(Path,State,FinalPath),
     write(FinalPath).
 bfs(State-Path,History,[Queue-PQ|Tail]):-
     length(PQ,0), %brackets output problem solver
