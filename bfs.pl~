@@ -3,27 +3,33 @@ initial_state([0,0]).
 final_state([3,_]).
 final_state([_,3]).
 
-main(D):-
+main():-
     initial_state(State),
-    bfs(State,D,[]),
-    writeln(D).
+    bfs(State-[],[],[]).
 
 bfs(State-[],History,[]):-
     append_cor(History,State,NewHistory),
-    findall(X-State, (search_states(State,X),not(member(X,NewHistory))),[NextState-P|T]),
+    findall(X-[State], (search_states(State,X),not(member(X,NewHistory))),[NextState-P|T]),
     bfs(NextState-[P],NewHistory,T).
 bfs(State-Path,_,[_]):-
     final_state(State),
-    writeln(Path),
-    write(State).
+    append(Path,State,FinalPath),
+    write(FinalPath).
 bfs(State-Path,History,[Queue-PQ|Tail]):-
+    length(PQ,0), %brackets output problem solver
     append_cor(History,State,NewHistory),
     findall(X-P1, (search_states(State,X),not(member(X,NewHistory)),append(Path,[State],P1)),[NextStates-P|T]),
     append(Tail,[NextStates-P|T],NewQueue),
     bfs(Queue-[PQ],NewHistory,NewQueue).
-bfs(State-[_],History,[Queue-PQ|Tail]):-
+bfs(State-Path,History,[Queue-PQ|Tail]):-
+    append_cor(History,State,NewHistory),
+    findall(X-P1, (search_states(State,X),not(member(X,NewHistory)),append(Path,[State],P1)),[NextStates-P|T]),
+    append(Tail,[NextStates-P|T],NewQueue),
+    bfs(Queue-PQ,NewHistory,NewQueue).
+bfs(State-_,History,[Queue-PQ|Tail]):-
     append_cor(History,State,NewHistory),
     bfs(Queue-PQ,NewHistory,Tail).
+
 
 
 resolve_path([],_,_):-!.
